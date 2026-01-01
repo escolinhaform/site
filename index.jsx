@@ -5,7 +5,6 @@ import { useAppLogic } from "./src/hooks/useAppLogic";
 import ProfilePage from "./src/components/ProfilePage";
 import { useRankingLogic } from "./src/hooks/useRankingLogic";
 import { useProfileLogic } from "./src/hooks/useProfileLogic";
-import { usePromotionLogic } from "./src/hooks/usePromotionLogic";
 import { getSafeImage, getSessionWeight, getRoleIcon, getRoleGradient, formatPlayerName, formatDate, formatHistoryDate, DEFAULT_AVATAR } from "./src/utils/helpers";
 import DungeonModal from "./src/components/DungeonModal";
 import HistorySection from "./src/components/HistorySection";
@@ -444,11 +443,7 @@ const MainContent = () => {
     handleRankingPageChange,
   } = useRankingLogic(activeTab, getSafeImage);
 
-  const {
-    promotionList,
-    loadingPromotion,
-  } = usePromotionLogic(dgs, activeTab, getSessionWeight);
-
+  
   // Sidebar search handler
   const handleSidebarSelectPlayer = (profile) => {
     navigate(`/${profile.nickname}`);
@@ -527,32 +522,16 @@ const MainContent = () => {
                 <h1 className="title-large">
                   {activeTab === "history"
                     ? "Histórico de "
-                    : activeTab === "promotion"
-                    ? "Promoção "
                     : "Ranking "}
                   <span className="title-accent">
                     {activeTab === "history"
                       ? "Aulas"
-                      : activeTab === "promotion"
-                      ? "Alunos"
                       : activeTab === "ranking"
                       ? "Maestria"
                       : "DGs"}
                   </span>
                 </h1>
-                {activeTab === "promotion" && (
-                  <p
-                    style={{
-                      color: "#888",
-                      marginTop: "4px",
-                      marginBottom: "8px",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    Calouros com &gt; 30 DGs nos últimos 15 dias
-                  </p>
-                )}
-                {activeTab === "ranking_aulas" && (
+                                {activeTab === "ranking_aulas" && (
                   <p
                     style={{
                       color: "#888",
@@ -613,120 +592,7 @@ const MainContent = () => {
             />
           )}
 
-          {activeTab === "promotion" && (
-            <div className="ranking-table-container">
-              {loadingPromotion ? (
-                <div
-                  style={{
-                    padding: "40px",
-                    textAlign: "center",
-                    color: "#888",
-                  }}
-                >
-                  Calculando elegibilidade...
-                </div>
-              ) : (
-                <table className="ranking-table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: 60, textAlign: "center" }}>#</th>
-                      <th>Aluno</th>
-                      <th style={{ color: "var(--accent)" }}>DGs (15 dias)</th>
-                      <th>Pontos Totais</th>
-                      <th>Role Atual</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {promotionList.length > 0 ? (
-                      promotionList.map((profile, idx) => (
-                        <tr
-                          key={profile.id}
-                          onClick={() => handleOpenProfile(profile)}
-                        >
-                          <td className="rank-number" style={{ color: "#666" }}>
-                            {idx + 1}
-                          </td>
-                          <td>
-                            <div className="player-cell">
-                              <img
-                                src={getSafeImage(profile.image)}
-                                className="player-avatar-small"
-                                onError={handleImageError}
-                              />
-                              <div>
-                                <div
-                                  className={
-                                    getRoleGradient(profile.role)
-                                      ? "holo-text"
-                                      : ""
-                                  }
-                                  style={{
-                                    fontWeight: "600",
-                                    color: "#fff",
-                                    backgroundImage: getRoleGradient(
-                                      profile.role
-                                    ),
-                                  }}
-                                >
-                                  {formatPlayerName(profile.nickname)}
-                                </div>
-                                <div
-                                  style={{ fontSize: "0.75rem", color: "#666" }}
-                                >
-                                  @{profile.username}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td
-                            style={{
-                              fontWeight: "700",
-                              color: "var(--accent)",
-                              fontSize: "1.1rem",
-                            }}
-                          >
-                            {profile.recent_dgs}
-                          </td>
-                          <td style={{ fontWeight: "700", color: "#fff" }}>
-                            {profile.total_points}
-                          </td>
-                          <td>
-                            <span
-                              style={{
-                                background: "rgba(255,255,255,0.1)",
-                                padding: "2px 8px",
-                                borderRadius: "4px",
-                                fontSize: "0.8rem",
-                                display: "inline-flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              {profile.role || "Calouro"}
-                            </span>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="5"
-                          style={{
-                            textAlign: "center",
-                            padding: "40px",
-                            color: "#666",
-                          }}
-                        >
-                          Nenhum calouro atingiu a meta de 30 DGs nos últimos 15
-                          dias.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          )}
-
+          
           {(activeTab === "ranking" || activeTab === "ranking_aulas") && (
             <>
               {loadingProfiles ? (
