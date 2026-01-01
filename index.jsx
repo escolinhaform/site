@@ -14,6 +14,7 @@ import { Icons } from "./src/components/Icons.jsx";
 import Sidebar from "./src/components/Sidebar";
 import TopThree from "./src/components/TopThree";
 import SidebarSearch from "./src/components/SidebarSearch";
+import ApiErrorBoundary from "./src/components/ApiErrorBoundary";
 import "./src/styles/styles.css";
 
 // Import pages
@@ -665,17 +666,19 @@ const MainContent = () => {
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainContent />} />
-        <Route path="/ranking-maestria" element={<RankingMaestriaPage />} />
-        <Route path="/ranking-dgs" element={<RankingDGsPage />} />
-        <Route path="/historico" element={<HistoricoPage />} />
-        <Route path="/promocao" element={<PromocaoPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/:nickname" element={<ProfilePage />} />
-      </Routes>
-    </Router>
+    <ApiErrorBoundary>
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainContent />} />
+          <Route path="/ranking-maestria" element={<RankingMaestriaPage />} />
+          <Route path="/ranking-dgs" element={<RankingDGsPage />} />
+          <Route path="/historico" element={<HistoricoPage />} />
+          <Route path="/promocao" element={<PromocaoPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/:nickname" element={<ProfilePage />} />
+        </Routes>
+      </Router>
+    </ApiErrorBoundary>
   );
 };
 

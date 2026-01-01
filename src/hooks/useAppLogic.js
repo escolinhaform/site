@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { apiFetch, getApiUrl, getApiHeaders } from "../utils/api";
 
 const DGS_API_URL = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/dgs_realizadas`;
 const DGS_API_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -23,17 +24,10 @@ export const useAppLogic = () => {
       let hasMore = true;
 
       while (hasMore) {
-        const response = await fetch(
-          `${DGS_API_URL}?select=*&order=date.desc&limit=${PAGE_SIZE}&offset=${offset}`,
-          {
-            headers: { 
-              apikey: DGS_API_KEY,
-              'Authorization': `Bearer ${DGS_API_KEY}`
-            },
-          }
-        );
-        
-        if (!response.ok) throw new Error("Falha ao buscar DGs");
+        const url = `${getApiUrl('dgs_realizadas')}?select=*&order=date.desc&limit=${PAGE_SIZE}&offset=${offset}`;
+        const response = await apiFetch(url, {
+          headers: getApiHeaders(false)
+        });
         
         const data = await response.json();
         
