@@ -20,6 +20,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiveTab, handleS
     if (path === '/ranking-dgs') return 'ranking_aulas';
     if (path === '/historico') return 'history';
     if (path === '/promocao') return 'promotion';
+    if (path === '/dashboard') return 'dashboard';
     return activeTab;
   };
 
@@ -52,6 +53,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiveTab, handleS
         return (
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        );
+      case "dashboard":
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
           </svg>
         );
       default:
@@ -101,6 +111,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiveTab, handleS
         <Link to="/promocao" className={`nav-btn${currentActiveTab === "promotion" ? " active" : ""}`} onClick={closeMobileSidebar}>
           <NavIcon type="promotion" />
           <span>Promoção Alunos</span>
+        </Link>
+        <Link to="/dashboard" className={`nav-btn${currentActiveTab === "dashboard" ? " active" : ""}`} onClick={closeMobileSidebar}>
+          <NavIcon type="dashboard" />
+          <span>Dashboard</span>
         </Link>
       </nav>
       <div className="footer-text" style={{ padding: "0 20px 20px" }}>&copy; 2025 Avalon</div>

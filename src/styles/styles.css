@@ -833,6 +833,11 @@ select.filter-input option { background-color: #1a1a1a; color: #fff; }
 .profile-view { animation: fadeIn 0.3s ease-out; width: 100%; margin: 0 auto; padding-bottom: 40px; }
 .profile-header-card { position: relative; border-radius: 20px; overflow: hidden; background: rgba(20,20,20,0.6); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); margin-bottom: 30px; display: flex; flex-direction: column; }
 
+/* Hide mobile history cards by default on desktop */
+.mobile-history-cards {
+  display: none;
+}
+
 /* ANIMATED BANNER */
 .profile-banner {
     height: 200px;

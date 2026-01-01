@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-const RANKING_DGS_API_URL = "https://kswvirdheurkykcqbokv.supabase.co/rest/v1/player_rankingdgs_30d";
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd3ZpcmRoZXVya3lrY3Fib2t2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2Njk0NTIwOCwiZXhwIjoyMDgyNTIxMjA4fQ.5CnziP68971KRQi7_j41oWAJ_asrSBncZiLLcIMxYfk";
+const RANKING_DGS_API_URL = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/player_rankingdgs_15d`;
+const API_KEY = import.meta.env.VITE_SUPABASE_SERVICE_KEY;
 
 export const usePromotionRankingLogic = (activeTab) => {
   const [promotionList, setPromotionList] = useState([]);
@@ -15,15 +15,19 @@ export const usePromotionRankingLogic = (activeTab) => {
     const fetchPromotionRanking = async () => {
       setLoadingPromotion(true);
       try {
-        // Buscar dados da tabela player_rankingdgs_30d
+        // Buscar dados da tabela player_rankingdgs_15d
         const params = new URLSearchParams({
           select: "*",
           order: "position.asc",
-          limit: "1000",
-          apikey: API_KEY,
+          limit: "1000"
         });
 
-        const response = await fetch(`${RANKING_DGS_API_URL}?${params.toString()}`);
+        const response = await fetch(`${RANKING_DGS_API_URL}?${params.toString()}`, {
+          headers: {
+            'apikey': API_KEY,
+            'Authorization': `Bearer ${API_KEY}`
+          }
+        });
         
         if (response.ok) {
           const allPlayers = await response.json();

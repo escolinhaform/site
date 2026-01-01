@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 
-const DGS_API_URL =
-  "https://kswvirdheurkykcqbokv.supabase.co/rest/v1/dgs_realizadas";
-const DGS_API_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd3ZpcmRoZXVya3lrY3Fib2t2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5NDUyMDgsImV4cCI6MjA4MjUyMTIwOH0.TaDw28xYzzIbkQQMVjyO_Rq8ljIS8S_rbQ3Y8fGvOoI";
+const DGS_API_URL = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/dgs_realizadas`;
+const DGS_API_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const useAppLogic = () => {
   const [activeTab, setActiveTab] = useState("ranking");
@@ -28,7 +26,10 @@ export const useAppLogic = () => {
         const response = await fetch(
           `${DGS_API_URL}?select=*&order=date.desc&limit=${PAGE_SIZE}&offset=${offset}`,
           {
-            headers: { apikey: DGS_API_KEY },
+            headers: { 
+              apikey: DGS_API_KEY,
+              'Authorization': `Bearer ${DGS_API_KEY}`
+            },
           }
         );
         

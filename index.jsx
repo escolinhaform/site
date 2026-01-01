@@ -21,6 +21,7 @@ import RankingMaestriaPage from "./src/pages/RankingMaestriaPage";
 import RankingDGsPage from "./src/pages/RankingDGsPage";
 import HistoricoPage from "./src/pages/HistoricoPage";
 import PromocaoPage from "./src/pages/PromocaoPage";
+import DashboardPage from "./src/pages/DashboardPage";
 
 
 
@@ -671,6 +672,7 @@ const App = () => {
         <Route path="/ranking-dgs" element={<RankingDGsPage />} />
         <Route path="/historico" element={<HistoricoPage />} />
         <Route path="/promocao" element={<PromocaoPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/:nickname" element={<ProfilePage />} />
       </Routes>
     </Router>

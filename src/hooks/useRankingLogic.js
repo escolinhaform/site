@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
-const PROFILES_API_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd3ZpcmRoZXVya3lrY3Fib2t2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2Njk0NTIwOCwiZXhwIjoyMDgyNTIxMjA4fQ.5CnziP68971KRQi7_j41oWAJ_asrSBncZiLLcIMxYfk";
+const PROFILES_API_KEY = import.meta.env.VITE_SUPABASE_SERVICE_KEY;
 
 export const useRankingLogic = (activeTab, getSafeImage) => {
   const [loadingProfiles, setLoadingProfiles] = useState(false);
@@ -35,11 +34,15 @@ export const useRankingLogic = (activeTab, getSafeImage) => {
         const params = new URLSearchParams({
           select: '*',
           order: 'position.asc',
-          limit: 3,
-          apikey: PROFILES_API_KEY,
+          limit: 3
         });
-        const API_URL = `https://kswvirdheurkykcqbokv.supabase.co/rest/v1/${tableName}`;
-        const response = await fetch(`${API_URL}?${params.toString()}`);
+        const API_URL = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/${tableName}`;
+        const response = await fetch(`${API_URL}?${params.toString()}`, {
+          headers: {
+            'apikey': PROFILES_API_KEY,
+            'Authorization': `Bearer ${PROFILES_API_KEY}`
+          }
+        });
         if (!response.ok) throw new Error(`Erro ao buscar top 3 de ${tableName}`);
         const data = await response.json();
         
@@ -82,12 +85,16 @@ export const useRankingLogic = (activeTab, getSafeImage) => {
           select: '*',
           order: 'position.asc',
           limit: 20,
-          offset,
-          apikey: PROFILES_API_KEY,
+          offset
         });
 
-        const API_URL = `https://kswvirdheurkykcqbokv.supabase.co/rest/v1/${tableName}`;
-        const response = await fetch(`${API_URL}?${params.toString()}`);
+        const API_URL = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/${tableName}`;
+        const response = await fetch(`${API_URL}?${params.toString()}`, {
+          headers: {
+            'apikey': PROFILES_API_KEY,
+            'Authorization': `Bearer ${PROFILES_API_KEY}`
+          }
+        });
         if (!response.ok) throw new Error(`Erro ao buscar ranking de ${tableName}`);
         
         const data = await response.json();

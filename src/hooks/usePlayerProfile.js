@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 
-const PROFILES_API_URL = "https://kswvirdheurkykcqbokv.supabase.co/rest/v1/players_profiles";
-const DGS_API_URL = "https://kswvirdheurkykcqbokv.supabase.co/rest/v1/dgs_realizadas";
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd3ZpcmRoZXVya3lrY3Fib2t2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2Njk0NTIwOCwiZXhwIjoyMDgyNTIxMjA4fQ.5CnziP68971KRQi7_j41oWAJ_asrSBncZiLLcIMxYfk";
-const DGS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd3ZpcmRoZXVya3lrY3Fib2t2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5NDUyMDgsImV4cCI6MjA4MjUyMTIwOH0.TaDw28xYzzIbkQQMVjyO_Rq8ljIS8S_rbQ3Y8fGvOoI";
+const PROFILES_API_URL = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/players_profiles`;
+const DGS_API_URL = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/dgs_realizadas`;
+const API_KEY = import.meta.env.VITE_SUPABASE_SERVICE_KEY;
+const DGS_API_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const usePlayerProfile = (nickname) => {
   const [profile, setProfile] = useState(null);
@@ -22,11 +22,15 @@ export const usePlayerProfile = (nickname) => {
         // Buscar perfil do jogador
         const profileParams = new URLSearchParams({
           nickname: `eq.${nickname}`,
-          select: "*",
-          apikey: API_KEY,
+          select: "*"
         });
 
-        const profileResponse = await fetch(`${PROFILES_API_URL}?${profileParams.toString()}`);
+        const profileResponse = await fetch(`${PROFILES_API_URL}?${profileParams.toString()}`, {
+          headers: {
+            'apikey': API_KEY,
+            'Authorization': `Bearer ${API_KEY}`
+          }
+        });
         if (!profileResponse.ok) throw new Error("Perfil não encontrado");
         
         const profileData = await profileResponse.json();
@@ -41,8 +45,13 @@ export const usePlayerProfile = (nickname) => {
         if (playerProfile.dungeon_history && Array.isArray(playerProfile.dungeon_history)) {
           const historyIds = playerProfile.dungeon_history;
           const historyPromises = historyIds.map(eventId => {
-            const url = `${DGS_API_URL}?eventid=eq.${eventId}&select=*&apikey=${DGS_API_KEY}`;
-            return fetch(url).then(res => res.json());
+            const url = `${DGS_API_URL}?eventid=eq.${eventId}&select=*`;
+            return fetch(url, {
+              headers: {
+                'apikey': DGS_API_KEY,
+                'Authorization': `Bearer ${DGS_API_KEY}`
+              }
+            }).then(res => res.json());
           });
 
           const results = await Promise.all(historyPromises);
@@ -65,11 +74,15 @@ export const usePlayerProfile = (nickname) => {
         // Por enquanto, vou manter para não quebrar outras funcionalidades.
         const dgsParams = new URLSearchParams({
           select: "*",
-          order: "date.desc",
-          apikey: DGS_API_KEY,
+          order: "date.desc"
         });
 
-        const dgsResponse = await fetch(`${DGS_API_URL}?${dgsParams.toString()}`);
+        const dgsResponse = await fetch(`${DGS_API_URL}?${dgsParams.toString()}`, {
+          headers: {
+            'apikey': DGS_API_KEY,
+            'Authorization': `Bearer ${DGS_API_KEY}`
+          }
+        });
         if (dgsResponse.ok) {
           const dgsData = await dgsResponse.json();
           setAllDgs(dgsData);
